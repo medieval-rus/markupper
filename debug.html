@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../dist/markupper.css">
+</head>
+<body>
+    <textarea id="source" style="width: 600px;height: 200px; display: none">
+(покло)но [ѿ] дав[ꙑ](да и ѿ) еси‐
+ѳа · къ матѳѣю · постои ·
+
+за нашего сироту · мо‐
+лви · дворѧнину · павлу · пе‐
+трову брату дать · грамо‐
+тѣ · не дасть · на него ·
+    </textarea>
+    <div id="target"></div>
+    <script src="dist/markupper.js"></script>
+    <script>
+
+        const sourceElement = document.getElementById('source');
+
+        const targetElement = document.getElementById('target');
+
+        debugAccessPoint.Markupper.parse(sourceElement.textContent).run(targetElement);
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+.markupper-editor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  .markupper-selector {
+    background-color: azure;
+
+    .markupper-text {
+
+      .markupper-page {
+
+        .markupper-line {
+
+          .markupper-piece {
+            display: inline-block;
+            margin: 3px;
+            padding: 5px;
+            border-width: 2px;
+            border-radius: 8px;
+            border-style: solid;
+            border-color: transparent;
+
+            &:hover {
+              cursor: pointer;
+            }
+
+            &-selected {
+              border-color: blue;
+            }
+
+            &__none {
+              $backgroundColor: lightgray;
+              $color: black;
+
+              background-color: $backgroundColor;
+              color: $color;
+
+              &:hover {
+                background-color: rgba($backgroundColor, 0.75);
+              }
+            }
+
+            &__word {
+              $backgroundColor: pink;
+              $color: black;
+
+              background-color: $backgroundColor;
+              color: $color;
+
+              &:hover {
+                background-color: rgba($backgroundColor, 0.75);
+              }
+            }
+
+            &__punctuation {
+              $backgroundColor: purple;
+              $color: white;
+
+              background-color: $backgroundColor;
+              color: $color;
+
+              &:hover {
+                background-color: rgba($backgroundColor, 0.75);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .markupper-attributor {
+    background-color: antiquewhite;
+
+    .markupper-attributor-label {
+      font-size: 24px;
+      font-weight: bold;
+      color: crimson;
+      text-align: center;
+    }
+
+    .markupper-attributes-container {
+      display: grid;
+      grid-template-columns: 3fr 5fr;
+
+      .markupper-attribute {
+        display: contents;
+
+        > * {
+          padding: 5px;
+        }
+
+        .markupper-attribute-name {
+          background-color: khaki;
+        }
+
+        .markupper-attribute-value {
+          background-color: darkkhaki;
+        }
+      }
+    }
+  }
+}

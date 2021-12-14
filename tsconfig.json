@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es5",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "downlevelIteration": true,
+    "lib": [
+      "dom",
+      "es5",
+      "scripthost",
+      "es2019",
+      "es2015.collection"
+    ]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
