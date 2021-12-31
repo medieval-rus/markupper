@@ -2,10 +2,9 @@ import {Component, ReactNode} from 'react';
 import {Text} from './components/Text';
 import {TextModel} from '../../model/TextModel';
 import {OnPieceSelect} from '../events/OnPieceSelect';
-import {PieceState} from '../states/PieceState';
 
 type Properties = {
-    textModel: TextModel<PieceState>;
+    textModel: TextModel;
     onPieceSelect: OnPieceSelect;
 };
 

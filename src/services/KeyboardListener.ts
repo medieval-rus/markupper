@@ -4,13 +4,13 @@ export class KeyboardListener
 
     public init(): void
     {
-        document.addEventListener('keydown', (event): void => {
+        document.addEventListener('keydown', event => {
             if (event.code === 'ControlLeft') {
                 this._isControlPressed = true;
             }
         });
 
-        document.addEventListener('keyup', (event): void => {
+        document.addEventListener('keyup', event => {
             if (event.code === 'ControlLeft') {
                 this._isControlPressed = false;
             }

@@ -6,7 +6,7 @@ import {SingleListValueHolder} from './components/value-holders/SingleListValueH
 import {PieceType} from '../../services/domain/PieceType';
 
 type Properties = {
-    pieceModels: Set<PieceState>;
+    pieceModels: PieceState[];
     onPieceTypeChange: (pieceModel: PieceModelInterface, pieceType: string) => void;
 };
 
@@ -80,11 +80,11 @@ export class Attributor extends Component<Properties, {}>
 
     private static getPieceType(pieceModel: PieceModelInterface): string
     {
-        return PieceType.getPieceTypeByModel(pieceModel).name;
+        return PieceType.getPieceTypeByModel(pieceModel).key;
     }
 
-    private static getPieceTypes(): string[]
+    private static getPieceTypes(): [string, string][]
     {
-        return PieceType.getPieceTypeNames();
+        return PieceType.getPieceTypes().map(pieceType => [pieceType.key, pieceType.name]);
     }
 }

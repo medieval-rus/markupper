@@ -1,16 +1,16 @@
 import {TextModel} from '../model/TextModel';
-import {instanceToPlain, plainToInstance} from 'class-transformer';
-import {PieceModelInterface} from '../model/pieces/PieceModelInterface';
 
 export class TextModelSerializer
 {
-    public serialize(textModel: TextModel<PieceModelInterface>): string
+    public serialize(textModel: TextModel): string
     {
-        return JSON.stringify(instanceToPlain(textModel));
+        return JSON.stringify(textModel.serialize(), null, 2);
     }
 
-    public deserialize(text: string): TextModel<PieceModelInterface>
+    public deserialize(text: string): TextModel
     {
-        return plainToInstance(TextModel, JSON.parse(text)) as TextModel<PieceModelInterface>;
+        const serialized = JSON.parse(text);
+
+        return TextModel.deserialize(serialized)
     }
 }

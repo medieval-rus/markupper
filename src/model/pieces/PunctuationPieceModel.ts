@@ -14,6 +14,18 @@ export class PunctuationPieceModel implements PieceModelInterface
         return new PunctuationPieceModel(other.value);
     }
 
+    public serialize(): any
+    {
+        return {
+            value: this._value
+        }
+    }
+
+    public static deserialize(pieceData: any): PieceModelInterface
+    {
+        return new PunctuationPieceModel(pieceData.value);
+    }
+
     public get value(): string 
     {
         return this._value;

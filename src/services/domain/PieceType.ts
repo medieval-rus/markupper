@@ -5,20 +5,22 @@ import {PunctuationPieceModel} from '../../model/pieces/PunctuationPieceModel';
 
 type PieceTypeConverter = (other: PieceModelInterface) => PieceModelInterface;
 
+type PieceTypeDeserializer = (pieceData: any) => PieceModelInterface;
+
 export class PieceType
 {
     private static readonly pieceTypes: PieceType[] = [
-        new PieceType('без разметки', NonePieceModel, NonePieceModel.fromOtherType),
-        new PieceType('слово', WordPieceModel, WordPieceModel.fromOtherType),
-        new PieceType('пунктуация', PunctuationPieceModel, PunctuationPieceModel.fromOtherType),
+        new PieceType('none', 'без разметки', NonePieceModel, NonePieceModel.fromOtherType, NonePieceModel.deserialize),
+        new PieceType('word', 'слово', WordPieceModel, WordPieceModel.fromOtherType, WordPieceModel.deserialize),
+        new PieceType('punctuation', 'пунктуация', PunctuationPieceModel, PunctuationPieceModel.fromOtherType, PunctuationPieceModel.deserialize),
     ];
 
-    public static getPieceTypeByName(pieceTypeName: string): PieceType
+    public static getPieceTypeByKey(pieceTypeKey: string): PieceType
     {
-        const pieceType = PieceType.pieceTypes.find(pieceType => pieceType.name === pieceTypeName);
+        const pieceType = PieceType.pieceTypes.find(pieceType => pieceType.key === pieceTypeKey);
 
         if (undefined === pieceType) {
-            throw new Error(`Unknown piece type name '${pieceTypeName}'.`);
+            throw new Error(`Unknown piece type key '${pieceTypeKey}'.`);
         }
 
         return pieceType;
@@ -35,20 +37,35 @@ export class PieceType
         return pieceType;
     }
 
-    public static getPieceTypeNames(): string[]
+    public static getPieceTypes(): PieceType[]
     {
-        return PieceType.pieceTypes.map(pieceType => pieceType.name);
+        return PieceType.pieceTypes;
     }
 
+    private readonly _key: string;
     private readonly _name: string;
     private readonly _modelType: Function;
-    private readonly _factory: PieceTypeConverter;
+    private readonly _convert: PieceTypeConverter;
+    private readonly _deserialize: PieceTypeDeserializer;
 
-    public constructor(name: string, modelType: Function, factory: PieceTypeConverter)
+    public constructor(
+        key: string,
+        name: string,
+        modelType: Function,
+        converter: PieceTypeConverter,
+        deserializer: PieceTypeDeserializer,
+    )
     {
+        this._key = key;
         this._name = name;
         this._modelType = modelType;
-        this._factory = factory;
+        this._convert = converter;
+        this._deserialize = deserializer;
+    }
+
+    public get key(): string
+    {
+        return this._key;
     }
 
     public get name(): string
@@ -61,9 +78,14 @@ export class PieceType
         return this._modelType;
     }
 
-    public get factory(): PieceTypeConverter
+    public get convert(): PieceTypeConverter
     {
-        return this._factory;
+        return this._convert;
+    }
+
+    public get deserialize(): PieceTypeDeserializer
+    {
+        return this._deserialize;
     }
 
     public isModelOfThisType(model: PieceModelInterface): boolean

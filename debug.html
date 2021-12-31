@@ -6,7 +6,13 @@
     <link rel="stylesheet" href="../dist/markupper.css">
 </head>
 <body>
-    <textarea id="source" style="width: 600px;height: 200px; display: none">
+
+    <div id="target"></div>
+    <textarea id="result" style="width: 500px; height: 300px"></textarea>
+    <script src="dist/markupper.js"></script>
+    <script>
+
+        const rawText = `
 (покло)но [ѿ] дав[ꙑ](да и ѿ) еси‐
 ѳа · къ матѳѣю · постои ·
 
@@ -14,16 +20,286 @@
 лви · дворѧнину · павлу · пе‐
 трову брату дать · грамо‐
 тѣ · не дасть · на него ·
-    </textarea>
-    <div id="target"></div>
-    <script src="dist/markupper.js"></script>
-    <script>
-
-        const sourceElement = document.getElementById('source');
-
+`;
+        const serializedText = `
+{
+  "pages": [
+    {
+      "lines": [
+        {
+          "pieces": [
+            {
+              "type": "word",
+              "data": {
+                "value": "(покло)но"
+              }
+            },
+            {
+              "type": "none",
+              "data": {
+                "value": "[ѿ]"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "дав[ꙑ](да"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "и"
+              }
+            },
+            {
+              "type": "none",
+              "data": {
+                "value": "ѿ)"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "еси‐"
+              }
+            }
+          ]
+        },
+        {
+          "pieces": [
+            {
+              "type": "word",
+              "data": {
+                "value": "ѳа"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "къ"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "матѳѣю"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "постои"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lines": [
+        {
+          "pieces": [
+            {
+              "type": "word",
+              "data": {
+                "value": "за"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "нашего"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "сироту"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "мо‐"
+              }
+            }
+          ]
+        },
+        {
+          "pieces": [
+            {
+              "type": "word",
+              "data": {
+                "value": "лви"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "дворѧнину"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "павлу"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "пе‐"
+              }
+            }
+          ]
+        },
+        {
+          "pieces": [
+            {
+              "type": "word",
+              "data": {
+                "value": "трову"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "брату"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "дать"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "грамо‐"
+              }
+            }
+          ]
+        },
+        {
+          "pieces": [
+            {
+              "type": "word",
+              "data": {
+                "value": "тѣ"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "не"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "дасть"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "на"
+              }
+            },
+            {
+              "type": "word",
+              "data": {
+                "value": "него"
+              }
+            },
+            {
+              "type": "punctuation",
+              "data": {
+                "value": "·"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+`;
         const targetElement = document.getElementById('target');
 
-        debugAccessPoint.Markupper.parse(sourceElement.textContent).run(targetElement);
+        const resultElement = document.getElementById('result');
+
+        const useRaw = false;
+
+        const markupper = useRaw
+            ? debugAccessPoint.Markupper.parse(rawText)
+            : debugAccessPoint.Markupper.deserialize(serializedText);
+
+        markupper.run(targetElement, text => {
+            resultElement.value = text;
+        });
     </script>
 </body>
 </html>

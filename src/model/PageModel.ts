@@ -1,15 +1,28 @@
 import {LineModel} from './LineModel';
+import {SerializableInterface} from './SerializableInterface';
 
-export class PageModel<TPieceModel>
+export class PageModel implements SerializableInterface
 {
-    private readonly _lines: LineModel<TPieceModel>[];
+    private readonly _lines: LineModel[];
 
-    public constructor(lines: LineModel<TPieceModel>[])
+    public constructor(lines: LineModel[])
     {
         this._lines = lines;
     }
 
-    public get lines(): LineModel<TPieceModel>[]
+    public serialize(): any
+    {
+        return {
+            lines: this._lines.map(line => line.serialize()),
+        };
+    }
+
+    public static deserialize(pageData: any): PageModel
+    {
+        return new PageModel(pageData.lines.map((line: any) => LineModel.deserialize(line)))
+    }
+
+    public get lines(): LineModel[]
     {
         return this._lines;
     }

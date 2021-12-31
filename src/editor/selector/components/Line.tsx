@@ -2,10 +2,9 @@ import {Component, ReactNode} from 'react';
 import {LineModel} from '../../../model/LineModel';
 import {Piece} from './Piece';
 import {OnPieceSelect} from '../../events/OnPieceSelect';
-import {PieceState} from '../../states/PieceState';
 
 type Properties = {
-    model: LineModel<PieceState>;
+    model: LineModel;
     onPieceSelect: OnPieceSelect;
 };
 
@@ -21,7 +20,7 @@ export class Line extends Component<Properties, {}>
                         .model
                         .pieces
                         .map(
-                            (piece: PieceState, index: number): ReactNode => <Piece
+                            (piece, index) => <Piece
                                 key={index}
                                 model={piece.model}
                                 isSelected={piece.isSelected}

@@ -1,0 +1,1 @@
+export type OnModelChange = (model: string) => void;

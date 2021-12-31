@@ -1,7 +1,7 @@
 import {ChangeEvent, Component, ReactNode} from 'react';
 
 type Properties = {
-    values: string[];
+    values: [string, string][];
     selectedValue: string;
     onValueChange: (value: string) => void
 };
@@ -24,8 +24,8 @@ export class SingleListValueHolder extends Component<Properties, {}>
                         .values
                         .map(
                             value =>
-                                <option key={value} value={value}>
-                                    {value}
+                                <option key={value[0]} value={value[0]}>
+                                    {value[1]}
                                 </option>
                         )
                 }

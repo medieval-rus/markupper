@@ -3,24 +3,27 @@ import {PageModel} from '../model/PageModel';
 import {LineModel} from '../model/LineModel';
 import {PieceModelInterface} from '../model/pieces/PieceModelInterface';
 import {NonePieceModel} from '../model/pieces/NonePieceModel';
+import {WordPieceModel} from '../model/pieces/WordPieceModel';
+import {PunctuationPieceModel} from '../model/pieces/PunctuationPieceModel';
+import {PieceState} from '../editor/states/PieceState';
 
 export class RawTextParser
 {
-    public parse(text: string): TextModel<PieceModelInterface>
+    public parse(text: string): TextModel
     {
         return new TextModel(
             text
                 .split('\n\n')
                 .map(
-                    (page: string): PageModel<PieceModelInterface> => new PageModel(
+                    page => new PageModel(
                         page
                             .split('\n')
                             .map(
-                                (line: string): LineModel<PieceModelInterface> => new LineModel(
+                                line => new LineModel(
                                     line
                                         .split(' ')
                                         .map(
-                                            (piece: string): PieceModelInterface | null => {
+                                            piece => {
                                                 piece = piece.trim();
 
                                                 if (piece === '') {
@@ -31,14 +34,30 @@ export class RawTextParser
                                                     return null;
                                                 }
 
-                                                return new NonePieceModel(piece);
+                                                return RawTextParser.predictPieceType(piece);
                                             }
                                         )
-                                        .filter((piece: PieceModelInterface | null): boolean => piece !== null)
+                                        .filter(piece => piece !== null)
+                                        .map(piece => new PieceState(piece,false))
                                 )
                             )
+                            .filter(line => line.pieces.length > 0)
                     )
                 )
+                .filter(page => page.lines.length > 0)
         );
+    }
+
+    private static predictPieceType(piece: string): PieceModelInterface
+    {
+        if (/[а-яА-Я]+/.test(piece)) {
+            return new WordPieceModel(piece);
+        }
+
+        if (/[·:…-]+/.test(piece)) {
+            return new PunctuationPieceModel(piece);
+        }
+
+        return new NonePieceModel(piece);
     }
 }

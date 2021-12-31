@@ -4,35 +4,35 @@ import {TextModel} from './model/TextModel';
 import {RawTextParser} from './parsing/RawTextParser';
 import {TextModelSerializer} from './parsing/TextModelSerializer';
 import {Editor} from './editor/Editor';
-import {PieceModelInterface} from './model/pieces/PieceModelInterface';
 import {KeyboardListener} from './services/KeyboardListener';
+import {OnModelChange} from './OnModelChange';
 
 export class Markupper
 {
     private static parser: RawTextParser = new RawTextParser();
     private static serializer: TextModelSerializer = new TextModelSerializer();
 
-    private readonly textModel: TextModel<PieceModelInterface>;
+    private readonly textModel: TextModel;
 
-    public constructor(textModel: TextModel<PieceModelInterface>)
+    public constructor(textModel: TextModel)
     {
         this.textModel = textModel;
     }
 
-    public run(containerElement: HTMLDivElement): void
+    public run(containerElement: HTMLDivElement, onModelChange: OnModelChange): void
     {
         const keyboardListener = new KeyboardListener();
         keyboardListener.init();
 
         ReactDOM.render(
-            <Editor textModel={this.textModel} keyboardListener={keyboardListener}/>,
+            <Editor
+                keyboardListener={keyboardListener}
+                modelSerializer={Markupper.serializer}
+                textModel={this.textModel}
+                onModelChange={onModelChange}
+            />,
             containerElement
         );
-    }
-
-    public serialize(): string
-    {
-        return Markupper.serializer.serialize(this.textModel);
     }
 
     public static deserialize(text: string): Markupper
