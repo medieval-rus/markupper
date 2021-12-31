@@ -23,7 +23,7 @@ export class Line extends Component<Properties, {}>
                         .map(
                             (piece: PieceState, index: number): ReactNode => <Piece
                                 key={index}
-                                model={piece.piece}
+                                model={piece.model}
                                 isSelected={piece.isSelected}
                                 onPieceSelect={this.props.onPieceSelect}
                             />

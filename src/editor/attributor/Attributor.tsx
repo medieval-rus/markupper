@@ -1,24 +1,30 @@
 import {Component, ReactNode} from 'react';
 import {Attribute} from './components/Attribute';
-import {NonePieceModel} from '../../model/pieces/NonePieceModel';
-import {WordPieceModel} from '../../model/pieces/WordPieceModel';
-import {PunctuationPieceModel} from '../../model/pieces/PunctuationPieceModel';
 import {PieceState} from '../states/PieceState';
 import {PieceModelInterface} from '../../model/pieces/PieceModelInterface';
+import {SingleListValueHolder} from './components/value-holders/SingleListValueHolder';
+import {PieceType} from '../../services/domain/PieceType';
 
 type Properties = {
     pieceModels: Set<PieceState>;
+    onPieceTypeChange: (pieceModel: PieceModelInterface, pieceType: string) => void;
 };
 
 export class Attributor extends Component<Properties, {}>
 {
+    public constructor(props: Properties)
+    {
+        super(props);
+        this.onPieceTypeChange = this.onPieceTypeChange.bind(this);
+    }
+
     public render(): ReactNode
     {
-        let selectedPieces: PieceModelInterface[] = [];
+        const selectedPieces: PieceModelInterface[] = [];
 
         for (const pieceState of this.props.pieceModels) {
             if (pieceState.isSelected) {
-                selectedPieces.push(pieceState.piece);
+                selectedPieces.push(pieceState.model);
             }
         }
 
@@ -30,21 +36,7 @@ export class Attributor extends Component<Properties, {}>
             return Attributor.renderMany(selectedPieces);
         }
 
-        return Attributor.renderSingle(selectedPieces[0]);
-    }
-
-    private static getPieceType(pieceModel: PieceModelInterface): string
-    {
-        switch (pieceModel.constructor) {
-            case NonePieceModel:
-                return 'без разметки';
-            case WordPieceModel:
-                return 'слово';
-            case PunctuationPieceModel:
-                return 'пунктуация';
-            default:
-                throw new Error(`Unknown piece type ${typeof pieceModel}.`);
-        }
+        return this.renderSingle(selectedPieces[0]);
     }
 
     private static renderEmpty(): ReactNode
@@ -52,21 +44,25 @@ export class Attributor extends Component<Properties, {}>
         return <div className={'markupper-attributor'}/>;
     }
 
-    private static renderSingle(pieceModel: PieceModelInterface): ReactNode
+    private renderSingle(pieceModel: PieceModelInterface): ReactNode
     {
         return (
             <div className={'markupper-attributor'}>
-                <div className={'markupper-attributor-label'}>
-                    {pieceModel.value}
-                </div>
+                <div className={'markupper-attributor-label'}>{pieceModel.value}</div>
                 <div className={'markupper-attributes-container'}>
-                    <Attribute name={'Тип'} value={Attributor.getPieceType(pieceModel)}/>
+                    <Attribute name={'Тип'}>
+                        <SingleListValueHolder
+                            values={Attributor.getPieceTypes()}
+                            selectedValue={Attributor.getPieceType(pieceModel)}
+                            onValueChange={this.onPieceTypeChange.bind(this, pieceModel)}
+                        />
+                    </Attribute>
                 </div>
             </div>
         );
     }
 
-    private static renderMany(pieceModels: PieceModelInterface[])
+    private static renderMany(pieceModels: PieceModelInterface[]): ReactNode
     {
         return (
             <div className={'markupper-attributor'}>
@@ -75,5 +71,20 @@ export class Attributor extends Component<Properties, {}>
                 </div>
             </div>
         );
+    }
+
+    private onPieceTypeChange(pieceModel: PieceModelInterface, pieceType: string): void
+    {
+        this.props.onPieceTypeChange(pieceModel, pieceType);
+    }
+
+    private static getPieceType(pieceModel: PieceModelInterface): string
+    {
+        return PieceType.getPieceTypeByModel(pieceModel).name;
+    }
+
+    private static getPieceTypes(): string[]
+    {
+        return PieceType.getPieceTypeNames();
     }
 }

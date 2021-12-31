@@ -9,6 +9,11 @@ export class WordPieceModel implements PieceModelInterface
         this._value = value;
     }
 
+    public static fromOtherType(other: PieceModelInterface): PieceModelInterface
+    {
+        return new WordPieceModel(other.value);
+    }
+
     public get value(): string 
     {
         return this._value;

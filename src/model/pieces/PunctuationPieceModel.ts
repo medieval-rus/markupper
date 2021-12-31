@@ -9,6 +9,11 @@ export class PunctuationPieceModel implements PieceModelInterface
         this._value = value;
     }
 
+    public static fromOtherType(other: PieceModelInterface): PieceModelInterface
+    {
+        return new PunctuationPieceModel(other.value);
+    }
+
     public get value(): string 
     {
         return this._value;

@@ -1,8 +1,8 @@
-import {Component, ReactNode} from 'react';
+import {Component, ReactChild, ReactNode} from 'react';
 
 type Properties = {
     name: string | null;
-    value: string | null;
+    children: ReactChild;
 };
 
 export class Attribute extends Component<Properties, {}>
@@ -12,7 +12,7 @@ export class Attribute extends Component<Properties, {}>
         return (
             <div className={'markupper-attribute'}>
                 <div className={'markupper-attribute-name'}>{this.props.name}</div>
-                <div className={'markupper-attribute-value'}>{this.props.value}</div>
+                {this.props.children}
             </div>
         );
     }

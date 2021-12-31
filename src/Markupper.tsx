@@ -5,6 +5,7 @@ import {RawTextParser} from './parsing/RawTextParser';
 import {TextModelSerializer} from './parsing/TextModelSerializer';
 import {Editor} from './editor/Editor';
 import {PieceModelInterface} from './model/pieces/PieceModelInterface';
+import {KeyboardListener} from './services/KeyboardListener';
 
 export class Markupper
 {
@@ -20,8 +21,11 @@ export class Markupper
 
     public run(containerElement: HTMLDivElement): void
     {
+        const keyboardListener = new KeyboardListener();
+        keyboardListener.init();
+
         ReactDOM.render(
-            <Editor textModel={this.textModel}/>,
+            <Editor textModel={this.textModel} keyboardListener={keyboardListener}/>,
             containerElement
         );
     }

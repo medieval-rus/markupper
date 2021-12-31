@@ -9,6 +9,11 @@ export class NonePieceModel implements PieceModelInterface
         this._value = value;
     }
 
+    public static fromOtherType(other: PieceModelInterface): PieceModelInterface
+    {
+        return new NonePieceModel(other.value);
+    }
+
     public get value(): string 
     {
         return this._value;

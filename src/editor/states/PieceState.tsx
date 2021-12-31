@@ -2,18 +2,23 @@ import {PieceModelInterface} from '../../model/pieces/PieceModelInterface';
 
 export class PieceState
 {
-    private readonly _piece: PieceModelInterface;
+    private _model: PieceModelInterface;
     private _isSelected: boolean;
 
-    public constructor(piece: PieceModelInterface, isSelected: boolean)
+    public constructor(model: PieceModelInterface, isSelected: boolean)
     {
-        this._piece = piece;
+        this._model = model;
         this._isSelected = isSelected;
     }
 
-    public get piece(): PieceModelInterface
+    public get model(): PieceModelInterface
     {
-        return this._piece;
+        return this._model;
+    }
+
+    public set model(value: PieceModelInterface)
+    {
+        this._model = value;
     }
 
     public get isSelected(): boolean
@@ -21,7 +26,12 @@ export class PieceState
         return this._isSelected;
     }
 
-    public toggle(): boolean
+    public set isSelected(value: boolean)
+    {
+        this._isSelected = value;
+    }
+
+    public toggleIsSelected(): boolean
     {
         return this._isSelected = !this.isSelected;
     }
