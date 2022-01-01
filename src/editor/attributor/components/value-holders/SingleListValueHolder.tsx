@@ -17,7 +17,11 @@ export class SingleListValueHolder extends Component<Properties, {}>
     public render(): ReactNode
     {
         return (
-            <select onChange={this.onChange} value={this.props.selectedValue}>
+            <select
+                className={'markupper-attribute-value'}
+                value={this.props.selectedValue}
+                onChange={this.onChange}
+            >
                 {
                     this
                         .props

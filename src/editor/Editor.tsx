@@ -7,6 +7,8 @@ import {KeyboardListener} from '../services/KeyboardListener';
 import {PieceType} from '../services/domain/PieceType';
 import {TextModelSerializer} from '../parsing/TextModelSerializer';
 import {OnModelChange} from '../OnModelChange';
+import {AnalysisModel} from '../model/pieces/AnalysisModel';
+import {WordPieceModel} from '../model/pieces/WordPieceModel';
 
 type Properties = {
     keyboardListener: KeyboardListener;
@@ -30,6 +32,9 @@ export class Editor extends Component<Properties, State>
         super(props);
         this.onPieceSelect = this.onPieceSelect.bind(this);
         this.onPieceTypeChange = this.onPieceTypeChange.bind(this);
+        this.addNewAnalysis = this.addNewAnalysis.bind(this);
+        this.onLemmaChange = this.onLemmaChange.bind(this);
+        this.onPartOfSpeechChange = this.onPartOfSpeechChange.bind(this);
     }
 
     public render(): ReactNode
@@ -39,7 +44,13 @@ export class Editor extends Component<Properties, State>
         return (
             <div className={'markupper-editor'}>
                 <Selector textModel={this.state.textModel} onPieceSelect={this.onPieceSelect}/>
-                <Attributor pieceModels={this.state.textModel.pieces} onPieceTypeChange={this.onPieceTypeChange}/>
+                <Attributor
+                    pieceModels={this.state.textModel.pieces}
+                    onPieceTypeChange={this.onPieceTypeChange}
+                    addNewAnalysis={this.addNewAnalysis}
+                    onLemmaChange={this.onLemmaChange}
+                    onPartOfSpeechChange={this.onPartOfSpeechChange}
+                />
             </div>
         );
     }
@@ -92,6 +103,59 @@ export class Editor extends Component<Properties, State>
 
                 if (piece.model === pieceModel && !pieceType.isModelOfThisType(piece.model)) {
                     piece.model = pieceType.convert(pieceModel);
+                }
+            });
+
+            return {
+                textModel: previousState.textModel,
+            };
+        });
+    }
+
+    private addNewAnalysis(pieceModel: WordPieceModel): void
+    {
+        this.setState(previousState => {
+
+            previousState.textModel.pieces.forEach(piece => {
+
+                const existingPieceModel = piece.model;
+
+                if (existingPieceModel === pieceModel && existingPieceModel instanceof WordPieceModel) {
+                    existingPieceModel.addAnalysis(new AnalysisModel(null, null));
+                }
+            });
+
+            return {
+                textModel: previousState.textModel,
+            };
+        });
+    }
+
+    private onLemmaChange(analysis: AnalysisModel, lemma: string | null): void
+    {
+        this.setState(previousState => {
+
+            previousState.textModel.analyses.forEach(existingAnalysis => {
+
+                if (existingAnalysis === analysis) {
+                    existingAnalysis.lemma = lemma;
+                }
+            });
+
+            return {
+                textModel: previousState.textModel,
+            };
+        });
+    }
+
+    private onPartOfSpeechChange(analysis: AnalysisModel, partOfSpeech: string | null): void
+    {
+        this.setState(previousState => {
+
+            previousState.textModel.analyses.forEach(existingAnalysis => {
+
+                if (existingAnalysis === analysis) {
+                    existingAnalysis.partOfSpeech = partOfSpeech;
                 }
             });
 

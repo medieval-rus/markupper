@@ -1,6 +1,8 @@
 import {PageModel} from './PageModel';
 import {PieceState} from '../editor/states/PieceState';
 import {SerializableInterface} from './SerializableInterface';
+import {AnalysisModel} from './pieces/AnalysisModel';
+import {WordPieceModel} from './pieces/WordPieceModel';
 
 export class TextModel implements SerializableInterface
 {
@@ -34,5 +36,18 @@ export class TextModel implements SerializableInterface
             ._pages
             .flatMap(pageModel => pageModel.lines)
             .flatMap(lineModel => lineModel.pieces);
+    }
+
+    public get analyses(): AnalysisModel[]
+    {
+        return this
+            .pieces
+            .flatMap(pieceState => {
+                if (pieceState.model instanceof WordPieceModel) {
+                    return pieceState.model.analyses;
+                }
+
+                return [];
+            });
     }
 }

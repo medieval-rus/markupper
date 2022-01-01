@@ -51,7 +51,7 @@ export class RawTextParser
     private static predictPieceType(piece: string): PieceModelInterface
     {
         if (/[а-яА-Я]+/.test(piece)) {
-            return new WordPieceModel(piece);
+            return new WordPieceModel(piece, []);
         }
 
         if (/[·:…-]+/.test(piece)) {

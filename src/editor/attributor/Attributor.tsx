@@ -4,20 +4,22 @@ import {PieceState} from '../states/PieceState';
 import {PieceModelInterface} from '../../model/pieces/PieceModelInterface';
 import {SingleListValueHolder} from './components/value-holders/SingleListValueHolder';
 import {PieceType} from '../../services/domain/PieceType';
+import {Translator} from '../../services/Translator';
+import {Button} from './components/Button';
+import {WordPieceModel} from '../../model/pieces/WordPieceModel';
+import {AnalysisModel} from '../../model/pieces/AnalysisModel';
+import {AnalysisAttributor} from './components/AnalysisAttributor';
 
 type Properties = {
     pieceModels: PieceState[];
     onPieceTypeChange: (pieceModel: PieceModelInterface, pieceType: string) => void;
+    addNewAnalysis: (pieceModel: WordPieceModel) => void;
+    onLemmaChange: (analysis: AnalysisModel, lemma: string | null) => void;
+    onPartOfSpeechChange: (analysis: AnalysisModel, partOfSpeech: string | null) => void;
 };
 
 export class Attributor extends Component<Properties, {}>
 {
-    public constructor(props: Properties)
-    {
-        super(props);
-        this.onPieceTypeChange = this.onPieceTypeChange.bind(this);
-    }
-
     public render(): ReactNode
     {
         const selectedPieces: PieceModelInterface[] = [];
@@ -50,13 +52,32 @@ export class Attributor extends Component<Properties, {}>
             <div className={'markupper-attributor'}>
                 <div className={'markupper-attributor-label'}>{pieceModel.value}</div>
                 <div className={'markupper-attributes-container'}>
-                    <Attribute name={'Тип'}>
+                    <Attribute name={Translator.translate('attributor.attribute.piece.pieceType')}>
                         <SingleListValueHolder
-                            values={Attributor.getPieceTypes()}
-                            selectedValue={Attributor.getPieceType(pieceModel)}
+                            values={PieceType.getPieceTypes().map(pieceType => [pieceType.key, pieceType.name])}
+                            selectedValue={PieceType.getPieceTypeByModel(pieceModel).key}
                             onValueChange={this.onPieceTypeChange.bind(this, pieceModel)}
                         />
                     </Attribute>
+                    {
+                        pieceModel instanceof WordPieceModel &&
+                        pieceModel.analyses.map(
+                            (analysis, index) =>
+                                <AnalysisAttributor
+                                    key={index}
+                                    analysis={analysis}
+                                    onLemmaChange={this.props.onLemmaChange}
+                                    onPartOfSpeechChange={this.props.onPartOfSpeechChange}
+                                />
+                        )
+                    }
+                    {
+                        pieceModel instanceof WordPieceModel &&
+                        <Button
+                            text={Translator.translate('attributor.attribute.piece.addNewAnalysis')}
+                            onClick={this.addNewAnalysis.bind(this, pieceModel)}
+                        />
+                    }
                 </div>
             </div>
         );
@@ -78,13 +99,8 @@ export class Attributor extends Component<Properties, {}>
         this.props.onPieceTypeChange(pieceModel, pieceType);
     }
 
-    private static getPieceType(pieceModel: PieceModelInterface): string
+    private addNewAnalysis(pieceModel: WordPieceModel): void
     {
-        return PieceType.getPieceTypeByModel(pieceModel).key;
-    }
-
-    private static getPieceTypes(): [string, string][]
-    {
-        return PieceType.getPieceTypes().map(pieceType => [pieceType.key, pieceType.name]);
+        this.props.addNewAnalysis(pieceModel);
     }
 }
