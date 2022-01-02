@@ -18,7 +18,7 @@ export class SingleListValueHolder extends Component<Properties, {}>
     {
         return (
             <select
-                className={'markupper-attribute-value'}
+                className={'markupper-attributor-attribute-value'}
                 value={this.props.selectedValue}
                 onChange={this.onChange}
             >

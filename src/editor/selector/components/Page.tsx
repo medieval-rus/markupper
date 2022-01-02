@@ -13,7 +13,7 @@ export class Page extends Component<Properties, {}>
     public render(): ReactNode
     {
         return (
-            <div className={'markupper-page'}>
+            <div className={'markupper-selector-page'}>
                 {
                     this
                         .props

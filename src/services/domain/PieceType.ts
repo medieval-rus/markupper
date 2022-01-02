@@ -26,12 +26,12 @@ export class PieceType
         return pieceType;
     }
 
-    public static getPieceTypeByModel(pieceModel: PieceModelInterface): PieceType
+    public static getPieceTypeByModel(piece: PieceModelInterface): PieceType
     {
-        const pieceType = PieceType.pieceTypes.find(pieceType => pieceType.isModelOfThisType(pieceModel));
+        const pieceType = PieceType.pieceTypes.find(pieceType => pieceType.isModelOfThisType(piece));
 
         if (undefined === pieceType) {
-            throw new Error(`Unknown piece type model '${typeof pieceModel}'.`);
+            throw new Error(`Unknown piece type model '${typeof piece}'.`);
         }
 
         return pieceType;

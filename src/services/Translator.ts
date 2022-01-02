@@ -2,20 +2,24 @@ export abstract class Translator
 {
     private static readonly dictionary: any = {
         attributor: {
-            attribute: {
-                piece: {
-                    pieceType: 'Тип',
-                    addNewAnalysis: 'Добавить разбор',
-                },
-                analysis: {
+            analysis: {
+                label: 'Разбор %index%',
+                attribute: {
                     lemma: 'Лемма',
                     partOfSpeech: 'Часть речи'
                 }
+            },
+            piece: {
+                label: '%label%',
+                attribute: {
+                    pieceType: 'Тип',
+                    addNewAnalysis: 'Добавить разбор',
+                },
             }
         }
     };
 
-    public static translate(key: string): string
+    public static translate(key: string, values: {[key: string]: string} = {}): string
     {
         let target: any = Translator.dictionary;
 
@@ -25,6 +29,10 @@ export abstract class Translator
 
         if (typeof target !== 'string') {
             throw new Error(`Translation key ${key} doesn't exist.`)
+        }
+
+        for (const [search, replace] of Object.entries(values)) {
+            target = target.replace(search, replace)
         }
 
         return target;

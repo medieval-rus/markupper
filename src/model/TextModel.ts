@@ -34,8 +34,8 @@ export class TextModel implements SerializableInterface
     {
         return this
             ._pages
-            .flatMap(pageModel => pageModel.lines)
-            .flatMap(lineModel => lineModel.pieces);
+            .flatMap(page => page.lines)
+            .flatMap(line => line.pieces);
     }
 
     public get analyses(): AnalysisModel[]

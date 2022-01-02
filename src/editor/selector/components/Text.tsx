@@ -13,7 +13,7 @@ export class Text extends Component<Properties, {}>
     public render(): ReactNode
     {
         return (
-            <div className={'markupper-text'}>
+            <div className={'markupper-selector-text'}>
                 {
                     this
                         .props

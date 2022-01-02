@@ -2,11 +2,13 @@ import {SerializableInterface} from '../SerializableInterface';
 
 export class AnalysisModel implements SerializableInterface
 {
+    private readonly _name: string;
     private _lemma: string | null;
     private _partOfSpeech: string | null;
 
-    public constructor(lemma: string | null, partOfSpeech: string | null)
+    public constructor(name: string, lemma: string | null, partOfSpeech: string | null)
     {
+        this._name = name;
         this._lemma = lemma;
         this._partOfSpeech = partOfSpeech;
     }
@@ -14,6 +16,7 @@ export class AnalysisModel implements SerializableInterface
     public serialize(): any
     {
         return {
+            name: this._name,
             lemma: this._lemma,
             partOfSpeech: this._partOfSpeech,
         };
@@ -21,7 +24,12 @@ export class AnalysisModel implements SerializableInterface
 
     public static deserialize(analysisData: any): AnalysisModel
     {
-        return new AnalysisModel(analysisData.lemma, analysisData.partOfSpeech);
+        return new AnalysisModel(analysisData.name, analysisData.lemma, analysisData.partOfSpeech);
+    }
+
+    public get name(): string
+    {
+        return this._name;
     }
 
     public get lemma(): string | null

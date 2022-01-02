@@ -45,7 +45,7 @@ export class Editor extends Component<Properties, State>
             <div className={'markupper-editor'}>
                 <Selector textModel={this.state.textModel} onPieceSelect={this.onPieceSelect}/>
                 <Attributor
-                    pieceModels={this.state.textModel.pieces}
+                    pieces={this.state.textModel.pieces}
                     onPieceTypeChange={this.onPieceTypeChange}
                     addNewAnalysis={this.addNewAnalysis}
                     onLemmaChange={this.onLemmaChange}
@@ -93,16 +93,16 @@ export class Editor extends Component<Properties, State>
         });
     }
 
-    private onPieceTypeChange(pieceModel: PieceModelInterface, pieceTypeName: string): void
+    private onPieceTypeChange(piece: PieceModelInterface, pieceTypeName: string): void
     {
         const pieceType = PieceType.getPieceTypeByKey(pieceTypeName);
 
         this.setState(previousState => {
 
-            previousState.textModel.pieces.forEach(piece => {
+            previousState.textModel.pieces.forEach(pieceState => {
 
-                if (piece.model === pieceModel && !pieceType.isModelOfThisType(piece.model)) {
-                    piece.model = pieceType.convert(pieceModel);
+                if (pieceState.model === piece && !pieceType.isModelOfThisType(pieceState.model)) {
+                    pieceState.model = pieceType.convert(piece);
                 }
             });
 
@@ -112,16 +112,28 @@ export class Editor extends Component<Properties, State>
         });
     }
 
-    private addNewAnalysis(pieceModel: WordPieceModel): void
+    private addNewAnalysis(piece: WordPieceModel): void
     {
         this.setState(previousState => {
 
-            previousState.textModel.pieces.forEach(piece => {
+            previousState.textModel.pieces.forEach(pieceState => {
 
-                const existingPieceModel = piece.model;
+                const existingPieceModel = pieceState.model;
 
-                if (existingPieceModel === pieceModel && existingPieceModel instanceof WordPieceModel) {
-                    existingPieceModel.addAnalysis(new AnalysisModel(null, null));
+                if (existingPieceModel === piece && existingPieceModel instanceof WordPieceModel) {
+
+                    const lastAnalysisIndex = Math.max(
+                        0,
+                        ...existingPieceModel.analyses.map(analysis => parseInt(analysis.name))
+                    );
+
+                    existingPieceModel.addAnalysis(
+                        new AnalysisModel(
+                            (lastAnalysisIndex + 1).toString(),
+                            null,
+                            null
+                        )
+                    );
                 }
             });
 

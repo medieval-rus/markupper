@@ -34,8 +34,19 @@
                 "value": "(покло)но",
                 "analyses": [
                   {
-                    "lemma": "поклон",
+                    "name": "1",
+                    "lemma": "поклонъ",
                     "partOfSpeech": "сущ. м."
+                  },
+                  {
+                    "name": "2",
+                    "lemma": "поклон",
+                    "partOfSpeech": null
+                  },
+                  {
+                    "name": "3",
+                    "lemma": null,
+                    "partOfSpeech": null
                   }
                 ]
               }
@@ -321,7 +332,7 @@
 
         const resultElement = document.getElementById('result');
 
-        const useRaw = false;
+        const useRaw = true;
 
         const markupper = useRaw
             ? debugAccessPoint.Markupper.parse(rawText)

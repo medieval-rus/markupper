@@ -13,7 +13,7 @@ export class Line extends Component<Properties, {}>
     public render(): ReactNode
     {
         return (
-            <div className={'markupper-line'}>
+            <div className={'markupper-selector-line'}>
                 {
                     this
                         .props

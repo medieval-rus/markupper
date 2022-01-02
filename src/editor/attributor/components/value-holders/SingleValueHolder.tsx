@@ -18,7 +18,7 @@ export class SingleValueHolder extends Component<Properties, {}>
     {
         return (
             <input
-                className={'markupper-attribute-value'}
+                className={'markupper-attributor-attribute-value'}
                 value={this.props.value}
                 onChange={this.onChange}
                 placeholder={this.props.suggestedValues.join(', ')}

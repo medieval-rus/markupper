@@ -1,17 +1,18 @@
 .markupper-editor {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: row;
 
   .markupper-selector {
     background-color: azure;
+    flex: 1;
 
-    .markupper-text {
+    .markupper-selector-text {
 
-      .markupper-page {
+      .markupper-selector-page {
 
-        .markupper-line {
+        .markupper-selector-line {
 
-          .markupper-piece {
+          .markupper-selector-piece {
             display: inline-block;
             margin: 3px;
             padding: 5px;
@@ -72,31 +73,45 @@
 
   .markupper-attributor {
     background-color: antiquewhite;
+    flex: 1;
 
-    .markupper-attributor-label {
-      font-size: 24px;
-      font-weight: bold;
-      color: crimson;
-      text-align: center;
+    .markupper-attributor-piece {
+
+      .markupper-attributor-piece-label {
+        font-size: 24px;
+        font-weight: bold;
+        color: crimson;
+        text-align: center;
+      }
+
+      .markupper-attributor-analysis {
+        background-color: palegreen;
+
+        .markupper-attributor-analysis-label {
+          padding-left: 5px;
+          margin-bottom: 3px;
+        }
+      }
     }
 
-    .markupper-attributes-container {
-      display: grid;
-      grid-template-columns: 3fr 5fr;
+    .markupper-attributor-attributes-container {
+      display: flex;
+      flex-direction: column;
 
-      .markupper-attribute {
-        display: contents;
+      .markupper-attributor-attribute {
+        display: flex;
+        flex-direction: row;
 
-        > * {
+        .markupper-attributor-attribute-name {
+          background-color: khaki;
+          flex: 1;
           padding: 5px;
         }
 
-        .markupper-attribute-name {
-          background-color: khaki;
-        }
-
-        .markupper-attribute-value {
+        .markupper-attributor-attribute-value {
           display: block;
+          flex: 2;
+          padding: 5px;
         }
       }
     }

@@ -1,9 +1,7 @@
 import {Component, ReactNode} from 'react';
 import {PieceModelInterface} from '../../../model/pieces/PieceModelInterface';
-import {NonePieceModel} from '../../../model/pieces/NonePieceModel';
-import {WordPieceModel} from '../../../model/pieces/WordPieceModel';
-import {PunctuationPieceModel} from '../../../model/pieces/PunctuationPieceModel';
 import {OnPieceSelect} from '../../events/OnPieceSelect';
+import {PieceType} from '../../../services/domain/PieceType';
 
 type Properties = {
     model: PieceModelInterface;
@@ -23,7 +21,11 @@ export class Piece extends Component<Properties, {}>
     {
         return (
             <div
-                className={`markupper-piece ${this.getPieceTypeDependentClass()} ${this.getSelectDependentClass()}`}
+                className={
+                    'markupper-selector-piece ' +
+                    `markupper-selector-piece__${PieceType.getPieceTypeByModel(this.props.model).key} ` +
+                    `${this.props.isSelected ? 'markupper-selector-piece-selected' : ''}`
+                }
                 onClick={this.onClick}
             >
                 {this.props.model.value}
@@ -34,24 +36,5 @@ export class Piece extends Component<Properties, {}>
     private onClick(): void
     {
         this.props.onPieceSelect(this.props.model);
-    }
-
-    private getPieceTypeDependentClass(): string
-    {
-        switch (this.props.model.constructor) {
-            case NonePieceModel:
-                return 'markupper-piece__none';
-            case WordPieceModel:
-                return 'markupper-piece__word';
-            case PunctuationPieceModel:
-                return 'markupper-piece__punctuation';
-            default:
-                throw new Error(`Unknown piece type ${typeof this.props.model}.`)
-        }
-    }
-
-    private getSelectDependentClass(): string
-    {
-        return this.props.isSelected ? 'markupper-piece-selected' : '';
     }
 }
