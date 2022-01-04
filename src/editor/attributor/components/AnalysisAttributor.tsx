@@ -12,6 +12,7 @@ type Properties = {
     analysis: AnalysisModel;
     onLemmaChange: OnLemmaChange;
     onPartOfSpeechChange: OnPartOfSpeechChange;
+    onRemove: (analysis: AnalysisModel) => void;
 };
 
 export class AnalysisAttributor extends Component<Properties, {}>
@@ -21,12 +22,14 @@ export class AnalysisAttributor extends Component<Properties, {}>
         super(props);
         this.onLemmaChange = this.onLemmaChange.bind(this);
         this.onPartOfSpeechChange = this.onPartOfSpeechChange.bind(this);
+        this.onRemove = this.onRemove.bind(this);
     }
 
     public render(): ReactNode
     {
         return (
             <div className={'markupper-attributor-analysis'}>
+                <div className={'markupper-attributor-analysis-remove'} onClick={this.onRemove}/>
                 <div className={'markupper-attributor-analysis-label'}>
                     {Translator.translate('attributor.analysis.label', {'%index%': this.props.analysis.name})}
                 </div>
@@ -58,5 +61,10 @@ export class AnalysisAttributor extends Component<Properties, {}>
     private onPartOfSpeechChange(partOfSpeech: string): void
     {
         this.props.onPartOfSpeechChange(this.props.analysis, partOfSpeech.length === 0 ? null : partOfSpeech);
+    }
+
+    private onRemove(): void
+    {
+        this.props.onRemove(this.props.analysis);
     }
 }

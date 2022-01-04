@@ -1,4 +1,5 @@
-import {ChangeEvent, Component, ReactNode} from 'react';
+import {Component, ReactNode} from 'react';
+import {Combobox} from 'react-widgets/esm';
 
 type Properties = {
     value: string | null;
@@ -17,17 +18,19 @@ export class SingleValueHolder extends Component<Properties, {}>
     public render(): ReactNode
     {
         return (
-            <input
-                className={'markupper-attributor-attribute-value'}
-                value={this.props.value}
-                onChange={this.onChange}
-                placeholder={this.props.suggestedValues.join(', ')}
-            />
+            <div className={'markupper-attributor-attribute-value'}>
+                <Combobox
+                    hideEmptyPopup={true}
+                    value={this.props.value}
+                    data={this.props.suggestedValues}
+                    onChange={this.onChange}
+                />
+            </div>
         );
     }
 
-    private onChange(event: ChangeEvent<HTMLInputElement>): void
+    private onChange(dataItem: string): void
     {
-        this.props.onValueChange(event.target.value);
+        this.props.onValueChange(dataItem);
     }
 }

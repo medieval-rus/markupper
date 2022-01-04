@@ -1,3 +1,5 @@
+@import '~react-widgets/styles';
+
 .markupper-editor {
   display: flex;
   flex-direction: row;
@@ -86,6 +88,18 @@
 
       .markupper-attributor-analysis {
         background-color: palegreen;
+        position: relative;
+
+        .markupper-attributor-analysis-remove {
+          position: absolute;
+          width: 15px;
+          height: 15px;
+          background-color: red;
+          right: 0;
+          margin-right: 5px;
+          margin-top: 5px;
+          cursor: pointer;
+        }
 
         .markupper-attributor-analysis-label {
           padding-left: 5px;

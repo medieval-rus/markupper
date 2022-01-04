@@ -33,6 +33,7 @@ export class Editor extends Component<Properties, State>
         this.onPieceSelect = this.onPieceSelect.bind(this);
         this.onPieceTypeChange = this.onPieceTypeChange.bind(this);
         this.addNewAnalysis = this.addNewAnalysis.bind(this);
+        this.removeAnalysis = this.removeAnalysis.bind(this);
         this.onLemmaChange = this.onLemmaChange.bind(this);
         this.onPartOfSpeechChange = this.onPartOfSpeechChange.bind(this);
     }
@@ -48,6 +49,7 @@ export class Editor extends Component<Properties, State>
                     pieces={this.state.textModel.pieces}
                     onPieceTypeChange={this.onPieceTypeChange}
                     addNewAnalysis={this.addNewAnalysis}
+                    removeAnalysis={this.removeAnalysis}
                     onLemmaChange={this.onLemmaChange}
                     onPartOfSpeechChange={this.onPartOfSpeechChange}
                 />
@@ -93,10 +95,8 @@ export class Editor extends Component<Properties, State>
         });
     }
 
-    private onPieceTypeChange(piece: PieceModelInterface, pieceTypeName: string): void
+    private onPieceTypeChange(piece: PieceModelInterface, pieceType: PieceType): void
     {
-        const pieceType = PieceType.getPieceTypeByKey(pieceTypeName);
-
         this.setState(previousState => {
 
             previousState.textModel.pieces.forEach(pieceState => {
@@ -134,6 +134,25 @@ export class Editor extends Component<Properties, State>
                             null
                         )
                     );
+                }
+            });
+
+            return {
+                textModel: previousState.textModel,
+            };
+        });
+    }
+
+    private removeAnalysis(piece: WordPieceModel, analysis: AnalysisModel): void
+    {
+        this.setState(previousState => {
+
+            previousState.textModel.pieces.forEach(pieceState => {
+
+                const existingPieceModel = pieceState.model;
+
+                if (existingPieceModel === piece && existingPieceModel instanceof WordPieceModel) {
+                    existingPieceModel.removeAnalysis(analysis);
                 }
             });
 

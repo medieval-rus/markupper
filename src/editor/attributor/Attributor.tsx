@@ -5,11 +5,14 @@ import {WordPieceModel} from '../../model/pieces/WordPieceModel';
 import {PieceAttributor} from './components/PieceAttributor';
 import {OnPartOfSpeechChange} from '../events/OnPartOfSpeechChange';
 import {OnLemmaChange} from '../events/OnLemmaChange';
+import {OnPieceTypeChange} from '../events/OnPieceTypeChange';
+import {AnalysisModel} from '../../model/pieces/AnalysisModel';
 
 type Properties = {
     pieces: PieceState[];
-    onPieceTypeChange: (piece: PieceModelInterface, pieceType: string) => void;
+    onPieceTypeChange: OnPieceTypeChange;
     addNewAnalysis: (piece: WordPieceModel) => void;
+    removeAnalysis: (piece: WordPieceModel, analysis: AnalysisModel) => void;
     onLemmaChange: OnLemmaChange;
     onPartOfSpeechChange: OnPartOfSpeechChange;
 };
@@ -40,6 +43,7 @@ export class Attributor extends Component<Properties, {}>
                         piece={selectedPieces[0]}
                         onPieceTypeChange={this.props.onPieceTypeChange}
                         addNewAnalysis={this.props.addNewAnalysis}
+                        removeAnalysis={this.props.removeAnalysis}
                         onLemmaChange={this.props.onLemmaChange}
                         onPartOfSpeechChange={this.props.onPartOfSpeechChange}
                     />

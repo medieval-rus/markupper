@@ -10,11 +10,13 @@ import {PieceModelInterface} from '../../../model/pieces/PieceModelInterface';
 import {OnPartOfSpeechChange} from '../../events/OnPartOfSpeechChange';
 import {OnLemmaChange} from '../../events/OnLemmaChange';
 import {OnPieceTypeChange} from '../../events/OnPieceTypeChange';
+import {AnalysisModel} from '../../../model/pieces/AnalysisModel';
 
 type Properties = {
     piece: PieceModelInterface;
     onPieceTypeChange: OnPieceTypeChange;
     addNewAnalysis: (piece: WordPieceModel) => void;
+    removeAnalysis: (piece: WordPieceModel, analysis: AnalysisModel) => void;
     onLemmaChange: OnLemmaChange;
     onPartOfSpeechChange: OnPartOfSpeechChange;
 };
@@ -26,6 +28,7 @@ export class PieceAttributor extends Component<Properties, {}>
         super(props);
         this.onPieceTypeChange = this.onPieceTypeChange.bind(this);
         this.addNewAnalysis = this.addNewAnalysis.bind(this);
+        this.removeAnalysis = this.removeAnalysis.bind(this);
     }
 
     public render(): ReactNode
@@ -35,10 +38,12 @@ export class PieceAttributor extends Component<Properties, {}>
                 <div className={'markupper-attributor-piece-label'}>{this.props.piece.value}</div>
                 <div className={'markupper-attributor-attributes-container'}>
                     <Attribute name={Translator.translate('attributor.piece.attribute.pieceType')}>
-                        <SingleListValueHolder
-                            values={PieceType.getPieceTypes().map(pieceType => [pieceType.key, pieceType.name])}
-                            selectedValue={PieceType.getPieceTypeByModel(this.props.piece).key}
-                            onValueChange={this.onPieceTypeChange.bind(this, this.props.piece)}
+                        <SingleListValueHolder<PieceType>
+                            selectedValue={PieceType.getPieceTypeByModel(this.props.piece)}
+                            values={PieceType.getPieceTypes()}
+                            onValueChange={this.onPieceTypeChange}
+                            keyExtractor={(pieceType: PieceType): string => pieceType.key}
+                            labelExtractor={(pieceType: PieceType): string => pieceType.name}
                         />
                     </Attribute>
                     {
@@ -50,6 +55,7 @@ export class PieceAttributor extends Component<Properties, {}>
                                     analysis={analysis}
                                     onLemmaChange={this.props.onLemmaChange}
                                     onPartOfSpeechChange={this.props.onPartOfSpeechChange}
+                                    onRemove={this.removeAnalysis}
                                 />
                         )
                     }
@@ -65,15 +71,22 @@ export class PieceAttributor extends Component<Properties, {}>
         );
     }
 
-    private onPieceTypeChange(piece: PieceModelInterface, pieceType: string): void
+    private onPieceTypeChange(pieceType: PieceType): void
     {
-        this.props.onPieceTypeChange(piece, pieceType);
+        this.props.onPieceTypeChange(this.props.piece, pieceType);
     }
 
     private addNewAnalysis(): void
     {
         if (this.props.piece instanceof WordPieceModel) {
             this.props.addNewAnalysis(this.props.piece);
+        }
+    }
+
+    private removeAnalysis(analysis: AnalysisModel): void
+    {
+        if (this.props.piece instanceof WordPieceModel) {
+            this.props.removeAnalysis(this.props.piece, analysis);
         }
     }
 }

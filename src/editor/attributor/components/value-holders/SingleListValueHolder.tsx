@@ -1,14 +1,18 @@
-import {ChangeEvent, Component, ReactNode} from 'react';
+import {Component, ReactNode} from 'react';
+import {DropdownList} from 'react-widgets/esm';
+import {PieceType} from '../../../../services/domain/PieceType';
 
-type Properties = {
-    values: [string, string][];
-    selectedValue: string;
-    onValueChange: (value: string) => void
+type Properties<TValue> = {
+    values: TValue[];
+    selectedValue: TValue;
+    onValueChange: (value: PieceType) => void;
+    keyExtractor: (value: TValue) => string;
+    labelExtractor: (value: TValue) => string;
 };
 
-export class SingleListValueHolder extends Component<Properties, {}>
+export class SingleListValueHolder<TValue> extends Component<Properties<TValue>, {}>
 {
-    public constructor(props: Properties)
+    public constructor(props: Properties<TValue>)
     {
         super(props);
         this.onChange = this.onChange.bind(this);
@@ -17,28 +21,22 @@ export class SingleListValueHolder extends Component<Properties, {}>
     public render(): ReactNode
     {
         return (
-            <select
+            <div
                 className={'markupper-attributor-attribute-value'}
-                value={this.props.selectedValue}
-                onChange={this.onChange}
             >
-                {
-                    this
-                        .props
-                        .values
-                        .map(
-                            value =>
-                                <option key={value[0]} value={value[0]}>
-                                    {value[1]}
-                                </option>
-                        )
-                }
-            </select>
+                <DropdownList
+                    value={this.props.selectedValue}
+                    data={this.props.values}
+                    dataKey={this.props.keyExtractor}
+                    textField={this.props.labelExtractor}
+                    onChange={this.onChange}
+                />
+            </div>
         );
     }
 
-    private onChange(event: ChangeEvent<HTMLSelectElement>): void
+    private onChange(pieceType: PieceType): void
     {
-        this.props.onValueChange(event.target.value);
+        this.props.onValueChange(pieceType);
     }
 }
